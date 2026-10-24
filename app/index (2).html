@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#000000"><title>GiftGlaz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@700;800&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+:root{--gold:#d2b765;--line:#4a4020;--tx:#f5eccf;--mu:#8a857a;
+--g:linear-gradient(110deg,#7a672a 0%,#cdb165 22%,#f2e6b0 38%,#cdb165 54%,#7a672a 76%,#7a672a 100%);
+--b:linear-gradient(110deg,#2c230a 0%,#d9c070 25%,#2c230a 50%,#d9c070 75%,#2c230a 100%)}
+@keyframes sh{to{background-position:-200% 0}}
+@keyframes bd{from{background-position:0 0,0 0,0 0}to{background-position:0 0,0 0,-200% 0}}
+@keyframes gl{50%{box-shadow:0 0 44px #d2b76530,inset 0 0 30px #d2b7650d}}
+*{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}
+body{background:radial-gradient(110% 24% at 50% 0,#150f06,#000 70%) no-repeat #000;color:var(--tx);font:16px Inter,system-ui,sans-serif;padding:22px 16px 120px;min-height:100vh}
+h1,.dsp{font-family:Unbounded,system-ui,sans-serif;font-weight:800;letter-spacing:-.5px}h1{font-size:26px}
+.gt,.price{background-image:var(--g);background-size:200% 100%;animation:sh 4s linear infinite;-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{color:var(--mu);margin:4px 0 18px;font-size:15px}
+.card{border:1px solid transparent;border-radius:24px;padding:15px;margin-bottom:12px;background:radial-gradient(110% 85% at 90% 0%,#d2b76526,transparent 60%) padding-box,linear-gradient(160deg,#130f07,#030303) padding-box,var(--b) border-box;background-size:100% 100%,100% 100%,200% 100%;animation:bd 6s linear infinite,gl 5s ease-in-out infinite;box-shadow:0 0 30px #d2b76520,inset 0 0 24px #d2b76508}
+.row{display:flex;align-items:center;gap:12px}.sp{justify-content:space-between}
+.ic{width:42px;height:42px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;font-size:24px;background:var(--g);background-size:200% 100%;animation:sh 4s linear infinite;box-shadow:0 0 20px #d2b76540}
+.lbl{font-size:12px;letter-spacing:.22em;color:var(--mu);text-transform:uppercase}
+.btn{border:0;border-radius:999px;background-image:var(--g);background-size:200% 100%;animation:sh 4s linear infinite;color:#140e00;font-weight:700;font-size:15px;padding:11px 22px;cursor:pointer;box-shadow:0 0 18px #d2b76530}
+.btn:disabled{opacity:.45}
+.chip{border:1px solid var(--line);background:#0a0a0a;color:var(--tx);border-radius:999px;padding:7px 13px;font-size:13px;cursor:pointer;text-decoration:none}
+.chip.on{background-image:var(--g);background-size:200% 100%;color:#140e00;font-weight:700;border-color:transparent;box-shadow:0 0 24px #d2b76548}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.seg{display:flex;background:#0a0a0a;border:1px solid var(--line);border-radius:999px;padding:5px;margin:16px 0 8px}
+.seg button{flex:1;border:0;background:0;color:var(--mu);font-weight:700;padding:9px 6px;border-radius:999px;font-size:14px}
+.seg button.on{background-image:var(--g);background-size:200% 100%;animation:sh 4s linear infinite;color:#000;box-shadow:0 0 24px #d2b76545}
+input{width:100%;background:#050505;border:1px solid var(--gold);border-radius:999px;color:var(--tx);padding:13px 18px;font-size:15px;outline:0;box-shadow:0 0 22px #d2b7651c}
+.price{font-family:Unbounded,system-ui;font-size:30px;font-weight:800}
+ul{list-style:none;margin:14px 0}li{padding:7px 0 7px 22px;position:relative}li:before{content:"";position:absolute;left:2px;top:15px;width:7px;height:7px;border-radius:50%;background:var(--g)}
+nav{position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));display:flex;background:rgba(6,6,6,.94);backdrop-filter:blur(16px);border:1px solid var(--line);border-radius:30px;padding:7px 6px;box-shadow:0 0 18px #d2b7650e}
+nav button{flex:1;background:0;border:0;color:var(--mu);font-size:11px;padding:6px 0;cursor:pointer;position:relative}nav button i{display:block;font-style:normal;font-size:20px}
+nav button.on{color:var(--gold)}nav button.on:before{content:"";position:absolute;top:-10px;left:25%;right:25%;height:3px;border-radius:3px;background:var(--g)}
+section{display:none}section.on{display:block}
+.wh{position:relative;width:300px;margin:6px auto 0}
+#wheel{width:300px;height:300px;border-radius:50%;border:5px solid var(--gold);position:relative;transition:transform 4.5s cubic-bezier(.12,.7,.1,1);box-shadow:0 0 50px #d2b76530,inset 0 0 30px #000}
+#wheel span{position:absolute;left:50%;top:50%;width:120px;margin-left:-60px;text-align:center;font-size:13px;font-weight:800;letter-spacing:.04em;transform-origin:center}
+#spin{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:92px;height:92px;border-radius:50%;padding:0;border:5px solid #18130a;font-family:Unbounded,system-ui;font-size:14px}
+.pin{width:0;height:0;border:13px solid transparent;border-top:28px solid var(--gold);border-bottom:0;margin:0 auto -16px;position:relative;z-index:2;filter:drop-shadow(0 0 8px #d2b765)}
+.pz{display:flex;gap:10px;margin-top:10px}.pz div{flex:1;text-align:center;padding:12px 4px;border-radius:20px;border:1px solid var(--line);background:#0b0b0b;font-weight:700;font-size:14px}
+.pz small{display:inline-block;margin-top:8px;padding:3px 10px;border-radius:99px;background:#1b1b1b;color:var(--mu)}
+.pz .hot{background:linear-gradient(160deg,#2a2208,#0b0b0b);border-color:var(--gold);color:var(--gold);box-shadow:0 0 28px #d2b76530}
+.av{width:104px;height:104px;border-radius:50%;border:3px solid var(--gold);background:#000 center/cover;display:flex;align-items:center;justify-content:center;font:800 36px Unbounded,system-ui;color:var(--gold);box-shadow:0 0 36px #d2b76530}
+.crown{position:absolute;right:-6px;bottom:0;width:38px;height:38px;border-radius:50%;background:var(--g);display:none;align-items:center;justify-content:center;border:3px solid #000}
+.stats{display:flex;gap:10px;margin-top:16px}.stats div{flex:1;background:#101010;border-radius:20px;padding:11px 6px;text-align:center}.stats b{display:block;font:800 22px Unbounded,system-ui;color:var(--gold)}.stats small{color:var(--mu)}
+.mu{color:var(--mu);font-size:14px}.ok{color:#7ddc8a}
+#toast{position:fixed;top:14px;left:50%;transform:translateX(-50%);background:#1a1608;border:1px solid var(--gold);padding:10px 18px;border-radius:999px;display:none;z-index:9}
+.si{width:1em;height:1em;display:inline-block;vertical-align:-.15em;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}.si.f{fill:currentColor}.si{filter:drop-shadow(0 0 3px #d2b76533)}
+.ic{color:#140e00}.ic svg{width:22px;height:22px}.ic.dk{background:#151515;animation:none;box-shadow:none;color:var(--gold)}
+.price svg{color:#d2b765;width:.7em;height:.7em}.pz svg{width:28px;height:28px;margin-bottom:6px}.crown svg{width:20px;height:20px;color:#140e00}
+#md{display:none;position:fixed;inset:0;z-index:20}.bk{position:absolute;inset:0;background:#000b}
+.sh{position:absolute;left:0;right:0;bottom:0;background:linear-gradient(#17130a,#0a0a0a);border-top:1px solid var(--gold);border-radius:28px 28px 0 0;padding:22px 18px calc(22px + env(safe-area-inset-bottom))}
+.fld{display:flex;align-items:center;gap:10px;margin:14px 0 8px;background:#050505;border:1px solid var(--line);border-radius:18px;padding:0 16px}
+.fld span{color:var(--gold);font:800 20px Unbounded,system-ui}.fld input{border:0;box-shadow:none;background:0;padding:16px 0;border-radius:0;font-size:20px;letter-spacing:.06em}
+#buy{flex:1;max-width:210px;padding:14px 24px;font-size:16px}
+</style></head><body>
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="i-crown" viewBox="0 0 24 24"><path d="M3 18h18M4 8l4 4 4-7 4 7 4-4-2 10H6z"/></symbol>
+<symbol id="i-mega" viewBox="0 0 24 24"><path d="M3 11v2a1 1 0 001 1h2l5 4V6L6 10H4a1 1 0 00-1 1zM15 9a4 4 0 010 6M18 6.5a8 8 0 010 11"/></symbol>
+<symbol id="i-plane" viewBox="0 0 24 24"><path d="M21 3L3 10.5l6.5 2.5L12 20zM9.5 13L21 3"/></symbol>
+<symbol id="i-home" viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v9a1 1 0 01-1 1h-4v-6h-6v6H5a1 1 0 01-1-1z"/></symbol>
+<symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></symbol>
+<symbol id="i-wheel" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></symbol>
+<symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></symbol>
+<symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+<symbol id="i-flame" viewBox="0 0 24 24"><path d="M12 3c1 4 5 5 5 10a5 5 0 01-10 0c0-2 1-3 2-4 0 2 1 3 2 3 0-3-1-5 1-9z"/></symbol>
+<symbol id="i-head" viewBox="0 0 24 24"><path d="M4 14v-2a8 8 0 0116 0v2M4 14h3v5H5a1 1 0 01-1-1zM20 14h-3v5h2a1 1 0 001-1z"/></symbol>
+<symbol id="i-star" viewBox="0 0 24 24"><path d="M12 3l2.7 5.6 6.1.8-4.5 4.2 1.1 6-5.4-3-5.4 3 1.1-6L3.2 9.4l6.1-.8z"/></symbol>
+<symbol id="i-coin" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5h4a1.5 1.5 0 010 3h-3a1.5 1.5 0 000 3h4M12 7.5v2M12 15v2"/></symbol>
+<symbol id="i-ban" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M6 18L18 6"/></symbol>
+<symbol id="i-bot" viewBox="0 0 24 24"><rect x="4" y="8" width="16" height="11" rx="3"/><path d="M12 8V5M9 13v1M15 13v1"/></symbol>
+<symbol id="i-gift" viewBox="0 0 24 24"><path d="M3 9h18v4H3zM5 13v8h14v-8M12 9v12M12 9c-3 0-5-4-2-4 1 0 2 2 2 4zM12 9c3 0 5-4 2-4-1 0-2 2-2 4z"/></symbol>
+<symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20l4-1 11-11-3-3L5 16zM14 6l3 3"/></symbol>
+<symbol id="i-layers" viewBox="0 0 24 24"><path d="M12 3l9 5-9 5-9-5zM3 13l9 5 9-5"/></symbol>
+</defs></svg>
+<div id="toast"></div>
+
+<section id="home" class="on">
+ <h1 class="gt">GiftGlaz</h1><p class="sub">Элитный каталог Telegram-подарков</p>
+ <a id="ad" class="card row" style="display:flex;text-decoration:none;color:inherit" href="https://t.me/giftglaz_support_bot"><span class="ic dk"><svg class="si "><use href="#i-mega"/></svg></span><div style="flex:1"><div class="lbl">Реклама</div><b id="adt" style="font-size:20px;color:var(--gold)">Тут могла быть ваша реклама</b></div><span class="mu">›</span></a>
+ <div class="card">
+  <div class="row"><span class="ic"><svg class="si "><use href="#i-crown"/></svg></span><div><b class="gt dsp" style="font-size:21px">ПРЕМИУМ ДОСТУП</b><div class="mu">Максимум возможностей GiftGlaz</div></div></div>
+  <ul><li>+10 запросов в день</li><li>Снайпер цен</li><li>Подбор под твой профиль</li><li>Экспорт вишлистов</li></ul>
+  <div class="chips" id="plans"></div>
+  <div class="chips" id="methods"><button class="chip on" data-m="stars"><svg class="si f"><use href="#i-star"/></svg> Telegram Stars</button><button class="chip" data-m="crypto"><svg class="si "><use href="#i-coin"/></svg> Крипта</button></div>
+  <div class="row sp"><div><div class="price gt" id="price"></div><div class="mu" id="per"></div></div><button class="btn" id="buy">Купить</button></div>
+ </div>
+ <a class="card row" style="text-decoration:none;color:inherit" href="https://t.me/giftglaz"><span class="ic"><svg class="si "><use href="#i-plane"/></svg></span><div style="flex:1"><div class="lbl">Официальный канал</div><b class="gt dsp" style="font-size:20px">@giftglaz</b><div class="mu">Дропы, снайпер цен и розыгрыши</div></div></a>
+</section>
+
+<section id="search">
+ <h1>Поиск</h1><p class="sub">Сканируем Fragment, Getgems, MRKT и Portal</p>
+ <input id="q" placeholder="Например: зимний ряд на чёрном фоне">
+ <div class="seg"><button class="on" data-t="recent"><svg class="si "><use href="#i-clock"/></svg> Недавние</button><button data-t="pop"><svg class="si "><use href="#i-flame"/></svg> Популярные запросы</button></div>
+ <div style="text-align:right"><a class="mu" id="clr" href="#">Очистить историю</a></div>
+ <div class="chips" id="hist"></div>
+ <div class="card mu" id="res" style="display:none"></div>
+</section>
+
+<section id="wheelp">
+ <div class="row sp"><div><h1>Рулетка</h1><p class="sub">Крути колесо и забирай призы</p></div><span class="chip">Попытки: <b id="spins">3</b></span></div>
+ <div class="pin"></div><div class="wh"><div id="wheel"></div><button class="btn" id="spin">Крутить</button></div>
+ <p class="mu" id="wmsg" style="text-align:center;margin:22px 0">Нажмите «Крутить», чтобы испытать удачу</p>
+ <div class="lbl" style="margin-top:26px">Призы</div>
+ <div class="pz"><div><svg class="si "><use href="#i-ban"/></svg><br>Ничего<br><small>70%</small></div><div><svg class="si "><use href="#i-bot"/></svg><br>+1 ИИ-запрос<br><small>25%</small></div><div class="hot"><svg class="si "><use href="#i-gift"/></svg><br>Мишка / 15 Stars<br><small>5%</small></div></div>
+</section>
+
+<section id="tasks">
+ <h1>Задания</h1><p class="sub">Выполни задание и получи +1 запрос (один раз)</p><div id="tl"></div>
+</section>
+
+<section id="prof">
+ <div class="row sp"><h1>Профиль</h1><a class="chip" id="sup" href="https://t.me/giftglaz_support_bot" style="text-decoration:none;color:var(--gold)"><svg class="si "><use href="#i-head"/></svg> Поддержка</a></div>
+ <div class="card" style="text-align:center">
+  <div style="position:relative;width:104px;margin:0 auto 14px"><div class="av" id="av"></div><span class="crown" id="crown"><svg class="si "><use href="#i-crown"/></svg></span></div>
+  <b id="nm" class="dsp" style="font-size:22px"></b> <button class="chip" id="ed" style="padding:6px 10px"><svg class="si "><use href="#i-edit"/></svg></button>
+  <div class="mu" id="un"></div>
+  <div class="stats"><div><b id="st1">0</b><small>запросов</small></div><div><b id="st2">Free</b><small>тариф</small></div><div><b id="st3">0</b><small>бонус</small></div></div>
+ </div>
+ <div class="card"><div class="lbl">Кастомный номер</div>
+  <div class="row" style="margin-top:10px"><b id="ph" class="gt" style="font-size:22px;flex:1;letter-spacing:.05em">+888</b><button class="chip" id="edp"><svg class="si "><use href="#i-edit"/></svg></button></div>
+  <div class="mu" style="margin-top:8px">Любые цифры после +888 (4–10 цифр)</div></div>
+ <div class="card row sp"><div class="lbl">Язык</div><div class="row"><button class="chip on" data-lg="ru">RU</button><button class="chip" data-lg="en">EN</button></div></div>
+ <div class="lbl" style="margin:22px 4px 12px"><svg class="si "><use href="#i-layers"/></svg> Созданные ряды</div><div class="card mu">Пока нет рядов. Найди первый в разделе «Поиск».</div>
+</section>
+
+<div id="md"><div class="bk"></div><div class="sh"><div class="lbl" id="mt"></div><div class="fld"><span id="mp"></span><input id="mi" autocomplete="off"></div><div class="mu" id="mh" style="margin-bottom:16px"></div><div class="row"><button class="chip" id="mc" style="flex:1;padding:15px">Отмена</button><button class="btn" id="ms" style="flex:1">Сохранить</button></div></div></div>
+
+<nav id="nav">
+ <button data-s="home" class="on"><i><svg class="si "><use href="#i-home"/></svg></i>Главная</button><button data-s="search"><i><svg class="si "><use href="#i-search"/></svg></i>Поиск</button>
+ <button data-s="wheelp"><i><svg class="si "><use href="#i-wheel"/></svg></i>Рулетка</button><button data-s="tasks"><i><svg class="si "><use href="#i-check"/></svg></i>Задания</button><button data-s="prof"><i><svg class="si "><use href="#i-user"/></svg></i>Профиль</button>
+</nav>
+
+<script>
+// ===== НАСТРОЙКА: адрес твоего сервера (https). Пока пусто — приложение работает в демо-режиме =====
+const API_URL = 'https://giftglaz-api.duckdns.org';
+const tg = window.Telegram && Telegram.WebApp; if (tg) { tg.ready(); tg.expand(); }
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const toast = t => { const e = $('#toast'); e.textContent = t; e.style.display = 'block'; setTimeout(() => e.style.display = 'none', 2600); };
+async function api(path, opt = {}) {
+  if (!API_URL) throw new Error('demo');
+  const r = await fetch(API_URL + path, { ...opt, headers: { 'Content-Type': 'application/json', Authorization: 'tma ' + (tg ? tg.initData : '') }, body: opt.body ? JSON.stringify(opt.body) : undefined });
+  const d = await r.json().catch(() => ({})); if (!r.ok) throw Object.assign(new Error(d.error || 'err'), { code: d.error }); return d;
+}
+const tu = tg && tg.initDataUnsafe && tg.initDataUnsafe.user;
+let me = { displayName: tu ? [tu.first_name, tu.last_name].filter(Boolean).join(' ') : 'Гость', username: tu ? tu.username : null, photoUrl: tu && tu.photo_url, customPhone: null, usage: { left: 3, bonus: 0, premium: false, spinsLeft: 3 } };
+let plans = [{ id: 'm1', title: '1 месяц', stars: 100, rub: 150 }, { id: 'm3', title: '3 месяца', stars: 299, rub: 449 }, { id: 'm6', title: '6 месяцев', stars: 599, rub: 899 }, { id: 'm12', title: '1 год', stars: 1199, rub: 1799 }];
+let sel = 'm1', method = 'stars', tasks = [{ id: 'channel', title: 'Подписаться на канал', kind: 'telegram_chat', url: 'https://t.me/giftglaz', done: false }, { id: 'chat', title: 'Вступить в чат', kind: 'telegram_chat', url: 'https://t.me/giftglazchat', done: false }, { id: 'tiktok', title: 'Подписаться в TikTok', kind: 'link', url: 'https://tiktok.com/@giftglaz', done: false }];
+
+const openLink = u => tg ? (/^https:\/\/t\.me\//.test(u) ? tg.openTelegramLink(u) : tg.openLink(u)) : window.open(u, '_blank');
+document.addEventListener('click', e => { const a = e.target.closest('a[href^="http"]'); if (!a) return; e.preventDefault(); openLink(a.href); });
+// навигация
+$('#nav').onclick = e => { const b = e.target.closest('button'); if (!b) return; $$('nav button').forEach(x => x.classList.toggle('on', x === b)); $$('section').forEach(s => s.classList.toggle('on', s.id === b.dataset.s)); };
+
+// главная / тарифы
+function drawPlans() {
+  $('#plans').innerHTML = ''; plans.forEach(p => { const b = document.createElement('button'); b.className = 'chip' + (p.id === sel ? ' on' : ''); b.textContent = p.title; b.onclick = () => { sel = p.id; drawPlans(); }; $('#plans').append(b); });
+  const p = plans.find(x => x.id === sel); $('#price').innerHTML = method === 'stars' ? p.stars + ' ' + '<svg class="si f"><use href="#i-star"/></svg>' : p.rub + ' ₽'; $('#per').textContent = method === 'stars' ? p.title : p.title;
+}
+$('#methods').onclick = e => { const b = e.target.closest('button'); if (!b) return; method = b.dataset.m; $$('#methods .chip').forEach(x => x.classList.toggle('on', x === b)); drawPlans(); };
+$('#buy').onclick = async () => {
+  try {
+    const { link } = await api('/api/pay/' + method, { method: 'POST', body: { planId: sel } });
+    if (method === 'stars') tg.openInvoice(link, s => { if (s === 'paid') { toast('Оплачено! Обновляю…'); setTimeout(loadMe, 2500); } });
+    else tg.openTelegramLink(link);
+  } catch (e) { toast(e.message === 'demo' ? 'Сервер не подключён (демо-режим)' : 'Не удалось создать счёт'); }
+};
+
+// поиск
+const hist = () => JSON.parse(localStorage.getItem('hist') || '[]');
+function drawHist(t = 'recent') { const list = t === 'recent' ? hist() : ['Royal Crown', 'Gold Locket', 'Зимний ряд на чёрном фоне', 'Onyx #3402']; $('#hist').innerHTML = ''; list.forEach(x => { const c = document.createElement('button'); c.className = 'chip'; c.textContent = x; c.onclick = () => { $('#q').value = x; }; $('#hist').append(c); }); }
+$$('[data-t]').forEach(b => b.onclick = () => { $$('[data-t]').forEach(x => x.classList.toggle('on', x === b)); drawHist(b.dataset.t); });
+$('#q').onkeydown = e => { if (e.key !== 'Enter') return; const v = e.target.value.trim(); if (!v) return; localStorage.setItem('hist', JSON.stringify([v, ...hist().filter(x => x !== v)].slice(0, 8))); drawHist(); const r = $('#res'); r.style.display = 'block'; r.textContent = 'ИИ-подбор ряда из 3 подарков подключим на следующем этапе.'; };
+
+$('#clr').onclick = e => { e.preventDefault(); localStorage.removeItem('hist'); drawHist(); };
+// рулетка
+const secs = ['nothing', 'ai', 'nothing', 'bear', 'nothing', 'ai', 'nothing', 'ai'], names = { nothing: 'Ничего', ai: '+1 ИИ', bear: '15 STARS' };
+const w = $('#wheel'); w.style.background = 'conic-gradient(' + secs.map((s, i) => (s === 'bear' ? '#d2b765' : i % 2 ? '#15110a' : '#0a0a0a') + ' ' + i * 45 + 'deg ' + (i + 1) * 45 + 'deg').join(',') + ')';
+secs.forEach((s, i) => { const e = document.createElement('span'); e.textContent = names[s]; e.style.color = s === 'bear' ? '#000' : s === 'ai' ? '#d2b765' : '#8d887b'; e.style.transform = 'rotate(' + (i * 45 + 22.5) + 'deg) translateY(-105px)'; w.append(e); });
+let rot = 0;
+$('#spin').onclick = async () => {
+  const btn = $('#spin'); btn.disabled = true; let prize;
+  try { const d = await api('/api/wheel/spin', { method: 'POST' }); prize = d.prize; me.usage = d.usage; }
+  catch (e) { if (e.code === 'no_spins_left') { toast('Попытки на сегодня закончились'); btn.disabled = false; return; } if (API_URL) { toast('Ошибка сети'); btn.disabled = false; return; } if (me.usage.spinsLeft < 1) { toast('Попытки на сегодня закончились'); btn.disabled = false; return; } me.usage.spinsLeft--; prize = secs[Math.floor(Math.random() * 8)]; }
+  const idx = secs.map((s, i) => s === prize ? i : -1).filter(i => i >= 0).sort(() => Math.random() - .5)[0];
+  rot += 360 * 5 + ((360 - (idx * 45 + 22.5) - rot % 360) + 360) % 360; w.style.transform = 'rotate(' + rot + 'deg)';
+  setTimeout(() => { $('#wmsg').textContent = prize === 'bear' ? 'Мишка! Напиши в поддержку, чтобы получить приз' : prize === 'ai' ? '+1 ИИ-запрос!' : 'В этот раз ничего'; if (me.usage) { $('#spins').textContent = me.usage.spinsLeft; btn.disabled = me.usage.spinsLeft < 1; drawMe(); } else btn.disabled = false; }, 4700);
+};
+
+// задания
+function drawTasks() {
+  $('#tl').innerHTML = ''; tasks.forEach(t => {
+    const c = document.createElement('div'); c.className = 'card';
+    c.innerHTML = '<b></b><div class="mu">+1 запрос</div><div class="row" style="margin-top:14px"></div>'; c.querySelector('b').textContent = t.title;
+    const box = c.lastChild;
+    if (t.done) box.innerHTML = '<span class="ok"><svg class="si"><use href="#i-check"/></svg> Выполнено</span>';
+    else {
+      const go = document.createElement('button'); go.className = 'chip'; go.style.cssText = 'flex:1;padding:14px'; go.textContent = 'Перейти';
+      const ck = document.createElement('button'); ck.className = 'btn'; ck.style.cssText = 'flex:1;padding:14px 10px'; ck.textContent = 'Проверить'; ck.disabled = t.kind === 'link' && !t.started;
+      go.onclick = async () => { tg ? (t.url.includes('t.me') ? tg.openTelegramLink(t.url) : tg.openLink(t.url)) : window.open(t.url); if (t.kind === 'link') { try { await api('/api/tasks/' + t.id + '/start', { method: 'POST' }); } catch {} setTimeout(() => ck.disabled = false, 10500); } };
+      ck.onclick = async () => { try { const d = await api('/api/tasks/' + t.id + '/claim', { method: 'POST' }); t.done = true; me.usage = d.usage; toast('+1 запрос!'); drawTasks(); drawMe(); } catch (e) { toast({ not_subscribed: 'Подписка не найдена', too_early: 'Подожди пару секунд', check_unavailable: 'Проверка недоступна', demo: 'Сервер не подключён' }[e.code || e.message] || 'Ошибка'); } };
+      box.append(go, ck);
+    } $('#tl').append(c);
+  });
+}
+
+// профиль
+function drawMe() {
+  const u = me.usage; $('#nm').textContent = me.displayName; $('#un').textContent = me.username ? '@' + me.username : '';
+  const av = $('#av'); if (me.photoUrl) { av.style.backgroundImage = 'url(' + me.photoUrl + ')'; av.textContent = ''; } else av.textContent = (me.displayName || 'G').slice(0, 2).toUpperCase();
+  $('#crown').style.display = u.premium ? 'flex' : 'none'; $('#st1').textContent = u.left; $('#st2').textContent = u.premium ? 'Premium' : 'Free'; $('#st3').textContent = u.bonus; $('#ph').textContent = me.customPhone || '+888 ____ ____'; $('#spins').textContent = u.spinsLeft;
+}
+function ask(title, val, hint, prefix, num) {
+  return new Promise(res => {
+    $('#mt').textContent = title; $('#mp').textContent = prefix; $('#mp').style.display = prefix ? '' : 'none';
+    const i = $('#mi'); i.value = val; i.inputMode = num ? 'numeric' : 'text'; $('#mh').textContent = hint; $('#md').style.display = 'block'; setTimeout(() => i.focus(), 60);
+    const done = v => { $('#md').style.display = 'none'; res(v); };
+    i.oninput = () => { if (num) i.value = i.value.replace(/\D/g, '').slice(0, 10); };
+    $('#mc').onclick = $('.bk').onclick = () => done(null); $('#ms').onclick = () => done(i.value); i.onkeydown = e => { if (e.key === 'Enter') done(i.value); };
+  });
+}
+const edit = (msg, cur, field, ok, o = {}) => async () => { const v = await ask(msg, cur(), o.hint || '', o.prefix || '', !!o.num); if (v === null) return; try { await api('/api/me', { method: 'PATCH', body: { [field]: o.send ? o.send(v) : v } }); ok(v); drawMe(); toast('Сохранено'); } catch (e) { if (e.message === 'demo') { ok(v); drawMe(); } else toast(e.code === 'bad_phone' ? 'Формат: +888 и 4–10 цифр' : 'Ошибка'); } };
+$('#ed').onclick = edit('Новое имя', () => me.displayName, 'displayName', v => me.displayName = v, { hint: 'До 32 символов' });
+$('#edp').onclick = edit('Кастомный номер', () => (me.customPhone || '').replace(/\D/g, '').slice(3), 'customPhone', v => { me.customPhone = v ? '+888 ' + v : null; }, { prefix: '+888', num: true, hint: 'Любые цифры после +888 (4–10 цифр)', send: v => v ? '+888' + v : '' });
+async function loadMe() { try { me = await api('/api/me'); } catch {} drawMe(); }
+// ===== Язык RU / EN =====
+const EN = {"Элитный каталог Telegram-подарков": "Elite Telegram gifts catalog", "Реклама": "Ad", "Тут могла быть ваша реклама": "Your ad could be here", "ПРЕМИУМ ДОСТУП": "PREMIUM ACCESS", "Максимум возможностей GiftGlaz": "Everything GiftGlaz can do", "+10 запросов в день": "+10 requests per day", "Снайпер цен": "Price sniper", "Подбор под твой профиль": "Picks for your profile", "Экспорт вишлистов": "Wishlist export", "Крипта": "Crypto", "Купить": "Buy", "Официальный канал": "Official channel", "Дропы, снайпер цен и розыгрыши": "Drops, price sniper and giveaways", "Поиск": "Search", "Сканируем Fragment, Getgems, MRKT и Portal": "Scanning Fragment, Getgems, MRKT and Portal", "Недавние": "Recent", "Популярные запросы": "Popular", "Очистить историю": "Clear history", "Рулетка": "Wheel", "Крути колесо и забирай призы": "Spin the wheel and win prizes", "Попытки:": "Spins:", "Крутить": "Spin", "Нажмите «Крутить», чтобы испытать удачу": "Press Spin to try your luck", "Призы": "Prizes", "Ничего": "Nothing", "+1 ИИ-запрос": "+1 AI request", "Мишка / 15 Stars": "Teddy / 15 Stars", "Задания": "Tasks", "Выполни задание и получи +1 запрос (один раз)": "Complete a task and get +1 request (once)", "Подписаться на канал": "Subscribe to the channel", "Вступить в чат": "Join the chat", "Подписаться в TikTok": "Follow on TikTok", "+1 запрос": "+1 request", "Перейти": "Open", "Проверить": "Check", "✔ Выполнено": "✔ Done", "Главная": "Home", "Профиль": "Profile", "Поддержка": "Support", "запросов": "requests", "тариф": "plan", "бонус": "bonus", "Кастомный номер": "Custom number", "Любые цифры после +888 (4–10 цифр)": "Any digits after +888 (4–10)", "Созданные ряды": "Created rows", "Пока нет рядов. Найди первый в разделе «Поиск».": "No rows yet. Find your first one in Search.", "Язык": "Language", "Отмена": "Cancel", "Сохранить": "Save", "1 месяц": "1 month", "3 месяца": "3 months", "6 месяцев": "6 months", "1 год": "1 year", "Гость": "Guest", "Новое имя": "New name", "До 32 символов": "Up to 32 characters", "ИИ-подбор ряда из 3 подарков подключим на следующем этапе.": "AI row picking (3 gifts) is coming in the next stage.", "+1 ИИ-запрос!": "+1 AI request!", "В этот раз ничего": "Nothing this time", "Мишка! Напиши в поддержку, чтобы получить приз": "Teddy! Message support to get your prize", "Выполнено": "Done", "Сервер не подключён (демо-режим)": "Server not connected (demo mode)", "Сервер не подключён": "Server not connected", "Не удалось создать счёт": "Could not create invoice", "Попытки на сегодня закончились": "No spins left today", "Подписка не найдена": "Subscription not found", "Подожди пару секунд": "Wait a few seconds", "Проверка недоступна": "Check unavailable", "Ошибка": "Error", "Сохранено": "Saved", "Ошибка сети": "Network error", "Оплачено! Обновляю…": "Paid! Refreshing…", "Формат: +888 и 4–10 цифр": "Format: +888 and 4–10 digits", "+1 запрос!": "+1 request!"};
+let lang = localStorage.getItem('lang') || ((tu && tu.language_code && tu.language_code !== 'ru') ? 'en' : 'ru');
+function tr() {
+  const w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); let n;
+  while ((n = w.nextNode())) {
+    if (n.__ru === undefined) { const t = n.nodeValue.trim(); if (!t || EN[t] === undefined) continue; n.__ru = n.nodeValue; }
+    const k = n.__ru.trim(); n.nodeValue = lang === 'en' ? n.__ru.replace(k, EN[k]) : n.__ru;
+  }
+  $('#q').placeholder = lang === 'en' ? 'E.g. winter row on black background' : 'Например: зимний ряд на чёрном фоне';
+  document.documentElement.lang = lang; $$('[data-lg]').forEach(b => b.classList.toggle('on', b.dataset.lg === lang));
+}
+new MutationObserver(tr).observe(document.body, { childList: true, subtree: true });
+$$('[data-lg]').forEach(b => b.onclick = () => { lang = b.dataset.lg; localStorage.setItem('lang', lang); tr(); });
+async function init() {
+  drawPlans(); drawHist(); drawTasks(); drawMe();
+  try { plans = (await api('/api/plans')).plans; if (!plans.find(p => p.id === sel)) sel = plans[0].id; drawPlans(); } catch {}
+  try { tasks = (await api('/api/tasks')).tasks; drawTasks(); } catch {}
+  await loadMe();
+}
+init(); tr();
+</script></body></html>
